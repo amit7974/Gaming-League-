@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matchbhai</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #f5f6f7;
+      color: #333;
+    }
+
+    /*  Navbar  */
+    .navbar {
+      background: #0072ff;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu-icon {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .menu-icon span {
+      width: 22px;
+      height: 3px;
+      background: #fff;
+      border-radius: 2px;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
+    .navbar .right button {
+      background: #fff;
+      color: #0072ff;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-weight: 600;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+
+    /* Sidebar (for mobile) */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -240px;
+      width: 240px;
+      height: 100%;
+      background: #fff;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+      transition: left 0.3s ease;
+      padding: 20px;
+      z-index: 999;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar h2 {
+      color: #0072ff;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 10px 0;
+      font-weight: 500;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      background: #fff;
+      padding: 10px;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .tabs button {
+      background: #f2f2f2;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tabs button.active {
+      background: #ff7b00;
+      color: #fff;
+    }
+
+    /*  Section Header  */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ff7b00;
+      color: #fff;
+      font-weight: 600;
+      padding: 10px;
+      font-size: 15px;
+    }
+
+    .section-header div {
+      flex: 1;
+      text-align: center;
+    }
+
+    .section-header div:first-child {
+      text-align: left;
+    }
+
+    /* ===== Match Cards ===== */
+    .match-container {
+      padding: 12px;
+    }
+
+    .match-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      padding: 10px;
+    }
+
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    .match-header a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #0072ff;
+    }
+
+    .indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00c853;
+    }
+
+    .odds {
+      display: flex;
+      justify-content: space-around;
+      gap: 6px;
+    }
+
+    .odd-box {
+      flex: 1;
+      height: 40px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .odd-box.green {
+      background: #009688;
+    }
+
+    .odd-box.orange {
+      background: #ff7b00;
+    }
+
+    /* Responsive  */
+    @media (max-width: 768px) {
+      .menu-icon {
+        display: flex;
+      }
+
+      .navbar .right {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .odds {
+        flex-direction: row;
+        gap: 4px;
+      }
+
+      .odd-box {
+        font-size: 14px;
+        height: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h2>Menu</h2>
+    <a href="#">Home</a>
+    <a href="#">Sports</a>
+    <a href="#">Cricket</a>
+    <a href="#">Football</a>
+    <a href="#">Tennis</a>
+  </div>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="left">
+      <div class="menu-icon" id="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="logo">Matchbhai</div>
+    </div>
+    <div class="right">
+      <button>Log In</button>
+      <button>Sign Up</button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button>🏠 Home</button>
+    <button>🏆 Sports</button>
+    <button class="active">🏏 Cricket</button>
+    <button>⚽ Football</button>
+    <button>🎾 Tennis</button>
+  </div>
+
+  <!-- Section Header -->
+  <div class="section-header">
+    <div>Cricket</div>
+    <div>1</div>
+    <div>X</div>
+    <div>2</div>
+  </div>
+
+  <!-- Match Cards -->
+  <div class="match-container">
+    <div class="match-card">
+      <div class="match-header">
+        <div>
+          <div>Sep 30 2025 3:00 PM</div>
+          <a href="#">ICC Womens Cricket World Cup</a>
+        </div>
+        <div class="indicator">
+          <div class="dot"></div> BM
+        </div>
+      </div>
+      <div class="odds">
+        <div class="odd-box green">0</div>
+        <div class="odd-box green">0</div>
+        <div class="odd-box orange">0</div>
+      </div>
+    </div>
+
+    <div class="match-card">
+      <div class="match-header">
+        <div>
+          <div>Oct 15 2025 2:30 AM</div>
+          <a href="#">Surat vs Karnataka</a>
+        </div>
+        <div class="indicator">
+          <div class="dot"></div> BM
+        </div>
+      </div>
+      <div class="odds">
+        <div class="odd-box green">0</div>
+        <div class="odd-box green">0</div>
+        <div class="odd-box orange">0</div>
+      </div>
+    </div>
+
+    <div class="match-card">
+      <div class="match-header">
+        <div>
+          <div>Oct 15 2025 3:30 AM</div>
+          <a href="#">Kerala vs Kanpur</a>
+        </div>
+        <div class="indicator">
+          <div class="dot"></div> BM
+        </div>
+      </div>
+      <div class="odds">
+        <div class="odd-box green">0</div>
+        <div class="odd-box green">0</div>
+        <div class="odd-box orange">0</div>
+      </div>
+    </div>
+
+    <div class="match-card">
+      <div class="match-header">
+        <div>
+          <div>Oct 18 2025 11:45 AM</div>
+          <a href="#">India vs England</a>
+        </div>
+        <div class="indicator">
+          <div class="dot"></div> BM
+        </div>
+      </div>
+      <div class="odds">
+        <div class="odd-box green">1.54</div>
+        <div class="odd-box green">1.22</div>
+        <div class="odd-box orange">2.5</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
